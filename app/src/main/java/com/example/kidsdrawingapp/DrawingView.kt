@@ -3,6 +3,7 @@ package com.example.kidsdrawingapp
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
 
@@ -29,7 +30,6 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
         drawPaint!!.strokeJoin = Paint.Join.ROUND
         drawPaint!!.strokeCap = Paint.Cap.ROUND
         canvasPaint = Paint(Paint.DITHER_FLAG)
-        brushSize =  19f
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -88,6 +88,11 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
 
         return true
 
+    }
+
+    fun scaleBrush (newSize: Float) {
+        brushSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,newSize,resources.displayMetrics)
+        drawPaint!!.strokeWidth = brushSize
     }
 
     internal inner class CustomPath(var color: Int, var brushThickness: Float) : Path() {
