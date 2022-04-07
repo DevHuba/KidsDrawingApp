@@ -29,7 +29,7 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
         drawPaint!!.strokeJoin = Paint.Join.ROUND
         drawPaint!!.strokeCap = Paint.Cap.ROUND
         canvasPaint = Paint(Paint.DITHER_FLAG)
-        brushSize =  20f
+        brushSize =  19f
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
