@@ -3,4 +3,13 @@
     <string name="small_brush_image">small brush image</string>
     <string name="medium_brush_image">medium brush image</string>
     <string name="large_brush_image">large brush image</string>
+    <string name="brush_image">brush image</string>
+    <string name="skin_color">skin color</string>
+    <string name="black_color">black color</string>
+    <string name="red_color">red color</string>
+    <string name="green_color">green color</string>
+    <string name="blue_color">blue color</string>
+    <string name="yellow_color">yellow color</string>
+    <string name="lollipop_color">lollipop color</string>
+    <string name="pink_color">pink color</string>
 </resources>

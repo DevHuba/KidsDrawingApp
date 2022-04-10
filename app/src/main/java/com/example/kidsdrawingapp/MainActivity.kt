@@ -16,20 +16,18 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        //Scale brush with default size of 20
         binding.drawingView.scaleBrush(20f)
 
         binding.ibBrush.setOnClickListener {
             showBrushDialog()
         }
 
-        //Scale brush with default size of 20
-
 
     }
     
     private fun showBrushDialog () {
         val brushDialog = Dialog(this)
-        println("brushDialog -> ${brushDialog}")
         brushDialog.setContentView(R.layout.dialog_brush_size)
         brushDialog.setTitle("Brush size: ")
         val smallBtn: ImageButton = brushDialog.findViewById(R.id.ibSmallBrush)
