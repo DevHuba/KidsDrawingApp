@@ -1,15 +1,20 @@
 package com.example.kidsdrawingapp
 
 import android.app.Dialog
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageButton
+import android.widget.Toast
+import androidx.core.content.ContextCompat
+import androidx.core.view.get
 import com.example.kidsdrawingapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding:ActivityMainBinding
+    private var globalButtonCurrentPaint: ImageButton? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,8 +24,19 @@ class MainActivity : AppCompatActivity() {
         //Scale brush with default size of 20
         binding.drawingView.scaleBrush(20f)
 
+        val llPaintColors = binding.llPaintColors
+        globalButtonCurrentPaint = llPaintColors[1] as ImageButton
+        globalButtonCurrentPaint!!.setImageDrawable(
+            ContextCompat.getDrawable(this,R.drawable.pallet_pressed)
+        )
+
         binding.ibBrush.setOnClickListener {
             showBrushDialog()
+        }
+
+        binding.ibEraser.setOnClickListener {
+            showBrushDialog()
+            binding.drawingView.setColor("#ffffff")
         }
 
 
@@ -47,6 +63,22 @@ class MainActivity : AppCompatActivity() {
         }
         brushDialog.show()
     }
+    
+    fun paintClicked (view: View) {
+        if (view != globalButtonCurrentPaint) {
+            val imageButton  = view as ImageButton
+            val colorTag = imageButton.tag.toString()
+            binding.drawingView.setColor(colorTag)
+
+            imageButton.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.pallet_pressed))
+
+            globalButtonCurrentPaint?.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.pallet_normal))
+
+            globalButtonCurrentPaint = view
+
+        } 
+    }
+    
 }
 
 
