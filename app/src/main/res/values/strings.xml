@@ -13,4 +13,5 @@
     <string name="lollipop_color">lollipop color</string>
     <string name="pink_color">pink color</string>
     <string name="eraser_image">eraser image</string>
+    <string name="custom_image">custom image for background</string>
 </resources>

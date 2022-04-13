@@ -5,17 +5,37 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
-
-    <com.example.kidsdrawingapp.DrawingView
-        android:id="@+id/drawingView"
+    
+    <FrameLayout
+        android:id="@+id/flContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="5dp"
+        android:padding="1dp"
         android:background="@drawable/view_background_layout"
         app:layout_constraintBottom_toTopOf="@id/llPaintColors"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" >
+
+        <ImageView
+            android:id="@+id/ivCustomImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:background="@drawable/house2"
+            android:contentDescription="@string/custom_image"/>
+
+        <com.example.kidsdrawingapp.DrawingView
+            android:id="@+id/drawingView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#80FFFFFF"/>
+
+    </FrameLayout>
+
+
+
 
     <!--    TODO  increase colors number buy adding color picker into app   -->
 
@@ -27,7 +47,7 @@
         app:layout_constraintBottom_toTopOf="@id/ibBrush"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/drawingView">
+        app:layout_constraintTop_toBottomOf="@id/flContainer">
 
         <ImageButton
             android:layout_width="25dp"
