@@ -154,8 +154,22 @@
         android:scaleType="fitXY"
         android:src="@drawable/brush"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/ibImage"
         app:layout_constraintEnd_toStartOf="@id/ibEraser"
         app:layout_constraintTop_toBottomOf="@id/llPaintColors" />
+
+    <ImageButton
+        android:id="@+id/ibImage"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="5dp"
+        android:contentDescription="@string/image_button"
+        android:scaleType="fitXY"
+        android:src="@drawable/image"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/llPaintColors"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/ibBrush"
+        tools:layout_editor_absoluteX="5dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

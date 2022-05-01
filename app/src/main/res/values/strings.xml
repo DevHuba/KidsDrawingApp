@@ -14,4 +14,5 @@
     <string name="pink_color">pink color</string>
     <string name="eraser_image">eraser image</string>
     <string name="custom_image">custom image for background</string>
+    <string name="image_button">image button</string>
 </resources>
