@@ -5,36 +5,33 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
-    
+
     <FrameLayout
         android:id="@+id/flContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="5dp"
-        android:padding="1dp"
         android:background="@drawable/view_background_layout"
+        android:padding="1dp"
         app:layout_constraintBottom_toTopOf="@id/llPaintColors"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" >
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/ivCustomImage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            android:background="@drawable/house2"
-            android:contentDescription="@string/custom_image"/>
+            android:contentDescription="@string/custom_image"
+            android:scaleType="centerCrop" />
 
         <com.example.kidsdrawingapp.DrawingView
             android:id="@+id/drawingView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#80FFFFFF"/>
+            android:background="#80FFFFFF" />
 
     </FrameLayout>
-
-
 
 
     <!--    TODO  increase colors number buy adding color picker into app   -->
@@ -54,83 +51,97 @@
             android:layout_height="25dp"
             android:layout_margin="2dp"
             android:background="@color/skin"
-            android:tag="@color/skin"
-            android:onClick="paintClicked"
             android:contentDescription="@string/skin_color"
-            android:src="@drawable/pallet_normal" />
+            android:onClick="paintClicked"
+            android:src="@drawable/pallet_normal"
+            android:tag="@color/skin" />
 
         <ImageButton
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_margin="2dp"
             android:background="@color/black"
-            android:tag="@color/black"
-            android:onClick="paintClicked"
             android:contentDescription="@string/black_color"
-            android:src="@drawable/pallet_normal" />
+            android:onClick="paintClicked"
+            android:src="@drawable/pallet_normal"
+            android:tag="@color/black" />
 
         <ImageButton
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_margin="2dp"
             android:background="@color/red"
-            android:tag="@color/red"
-            android:onClick="paintClicked"
             android:contentDescription="@string/red_color"
-            android:src="@drawable/pallet_normal" />
+            android:onClick="paintClicked"
+            android:src="@drawable/pallet_normal"
+            android:tag="@color/red" />
 
         <ImageButton
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_margin="2dp"
             android:background="@color/green"
-            android:tag="@color/green"
-            android:onClick="paintClicked"
             android:contentDescription="@string/green_color"
-            android:src="@drawable/pallet_normal" />
+            android:onClick="paintClicked"
+            android:src="@drawable/pallet_normal"
+            android:tag="@color/green" />
 
         <ImageButton
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_margin="2dp"
             android:background="@color/blue"
-            android:tag="@color/blue"
-            android:onClick="paintClicked"
             android:contentDescription="@string/blue_color"
-            android:src="@drawable/pallet_normal" />
+            android:onClick="paintClicked"
+            android:src="@drawable/pallet_normal"
+            android:tag="@color/blue" />
 
         <ImageButton
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_margin="2dp"
             android:background="@color/yellow"
-            android:tag="@color/yellow"
-            android:onClick="paintClicked"
             android:contentDescription="@string/yellow_color"
-            android:src="@drawable/pallet_normal" />
+            android:onClick="paintClicked"
+            android:src="@drawable/pallet_normal"
+            android:tag="@color/yellow" />
 
         <ImageButton
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_margin="2dp"
             android:background="@color/lollipop"
-            android:tag="@color/lollipop"
-            android:onClick="paintClicked"
             android:contentDescription="@string/lollipop_color"
-            android:src="@drawable/pallet_normal" />
+            android:onClick="paintClicked"
+            android:src="@drawable/pallet_normal"
+            android:tag="@color/lollipop" />
 
         <ImageButton
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_margin="2dp"
             android:background="@color/pink"
-            android:tag="@color/pink"
-            android:onClick="paintClicked"
             android:contentDescription="@string/pink_color"
-            android:src="@drawable/pallet_normal" />
+            android:onClick="paintClicked"
+            android:src="@drawable/pallet_normal"
+            android:tag="@color/pink" />
 
 
     </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/ibSave"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="5dp"
+        android:contentDescription="@string/eraser_image"
+        android:scaleType="fitXY"
+        android:src="@drawable/save"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/llPaintColors"
+        app:layout_constraintStart_toEndOf="@+id/ibEraser"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
 
     <ImageButton
         android:id="@+id/ibEraser"
@@ -141,9 +152,10 @@
         android:scaleType="fitXY"
         android:src="@drawable/eraser"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/llPaintColors"
+        app:layout_constraintEnd_toEndOf="@id/ibSave"
         app:layout_constraintStart_toEndOf="@+id/ibBrush"
-        app:layout_constraintTop_toBottomOf="@id/llPaintColors" />
+        />
 
     <ImageButton
         android:id="@+id/ibBrush"
@@ -154,8 +166,8 @@
         android:scaleType="fitXY"
         android:src="@drawable/brush"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/ibImage"
         app:layout_constraintEnd_toStartOf="@id/ibEraser"
+        app:layout_constraintStart_toEndOf="@id/ibImage"
         app:layout_constraintTop_toBottomOf="@id/llPaintColors" />
 
     <ImageButton
@@ -167,9 +179,9 @@
         android:scaleType="fitXY"
         android:src="@drawable/image"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/llPaintColors"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/ibBrush"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/llPaintColors"
         tools:layout_editor_absoluteX="5dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
