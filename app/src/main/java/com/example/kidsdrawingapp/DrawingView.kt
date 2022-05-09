@@ -17,9 +17,18 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
     private var color = Color.BLACK
     private var canvas: Canvas? = null
     private var paths = ArrayList<CustomPath>()
+    private var undoPaths = ArrayList<CustomPath>()
 
     init {
         setUpDrawing()
+    }
+
+    fun onClickUndo() {
+        if (paths.size > 0) {
+            undoPaths.add(paths.removeAt(paths.size - 1))
+            invalidate()
+        }
+
     }
 
     private fun setUpDrawing() {
@@ -34,32 +43,32 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
-        canvasBitMap = Bitmap.createBitmap(w,h,Bitmap.Config.ARGB_8888)
+        canvasBitMap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
         canvas = Canvas(canvasBitMap!!)
     }
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
-        canvas?.drawBitmap(canvasBitMap!!,0f,0f,canvasPaint)
-        
+        canvas?.drawBitmap(canvasBitMap!!, 0f, 0f, canvasPaint)
+
         for (path in paths) {
             drawPaint!!.strokeWidth = path.brushThickness
             drawPaint!!.color = path.color
-            canvas?.drawPath(path,drawPaint!!)
+            canvas?.drawPath(path, drawPaint!!)
         }
-        
+
         if (!drawPath!!.isEmpty) {
             drawPaint!!.strokeWidth = drawPath!!.brushThickness
             drawPaint!!.color = drawPath!!.color
-            canvas?.drawPath(drawPath!!,drawPaint!!)
+            canvas?.drawPath(drawPath!!, drawPaint!!)
 
-        } 
+        }
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         val touchX = event?.x
         val touchY = event?.y
-        
+
         when (event?.action) {
             MotionEvent.ACTION_DOWN -> {
                 drawPath!!.color = color
@@ -67,17 +76,17 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
 
                 drawPath!!.reset()
                 if (touchX != null && touchY != null) {
-                    drawPath!!.moveTo(touchX,touchY)
+                    drawPath!!.moveTo(touchX, touchY)
                 }
             }
             MotionEvent.ACTION_MOVE -> {
                 if (touchX != null && touchY != null) {
-                    drawPath!!.lineTo(touchX,touchY)
+                    drawPath!!.lineTo(touchX, touchY)
                 }
             }
             MotionEvent.ACTION_UP -> {
                 paths.add(drawPath!!)
-                drawPath = CustomPath(color,brushSize)
+                drawPath = CustomPath(color, brushSize)
             }
             else -> {
                 return false
@@ -90,12 +99,12 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
 
     }
 
-    fun scaleBrush (newSize: Float) {
-        brushSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,newSize,resources.displayMetrics)
+    fun scaleBrush(newSize: Float) {
+        brushSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, newSize, resources.displayMetrics)
         drawPaint!!.strokeWidth = brushSize
     }
-    
-    fun setColor (newColor: String) {
+
+    fun setColor(newColor: String) {
         color = Color.parseColor(newColor)
         drawPaint!!.color = color
     }
