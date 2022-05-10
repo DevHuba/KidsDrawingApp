@@ -23,7 +23,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:background="@drawable/house2"
             android:contentDescription="@string/custom_image"/>
 
         <com.example.kidsdrawingapp.DrawingView
@@ -133,6 +132,34 @@
     </LinearLayout>
 
     <ImageButton
+        android:id="@+id/ibSave"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="5dp"
+        android:contentDescription="@string/eraser_image"
+        android:scaleType="fitXY"
+        android:src="@drawable/save"
+        app:layout_constraintStart_toEndOf="@+id/ibUndo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/llPaintColors"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+    <ImageButton
+        android:id="@+id/ibUndo"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="5dp"
+        android:contentDescription="@string/image_button"
+        android:scaleType="fitXY"
+        android:src="@drawable/undo"
+        app:layout_constraintTop_toBottomOf="@id/llPaintColors"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/ibEraser"
+        app:layout_constraintEnd_toStartOf="@id/ibSave"
+        tools:layout_editor_absoluteX="5dp" />
+
+    <ImageButton
         android:id="@+id/ibEraser"
         android:layout_width="50dp"
         android:layout_height="50dp"
@@ -140,10 +167,11 @@
         android:contentDescription="@string/eraser_image"
         android:scaleType="fitXY"
         android:src="@drawable/eraser"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/ibBrush"
-        app:layout_constraintTop_toBottomOf="@id/llPaintColors" />
+        app:layout_constraintEnd_toStartOf="@id/ibUndo"
+        app:layout_constraintTop_toBottomOf="@id/llPaintColors"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
 
     <ImageButton
         android:id="@+id/ibBrush"
