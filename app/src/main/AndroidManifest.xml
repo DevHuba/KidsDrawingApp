@@ -24,10 +24,10 @@
         </activity>
 
 
-<!--        FOR DATA WRITING INTO DEVICE LOCAL STORAGE-->
+        <!--        FOR DATA WRITING INTO DEVICE LOCAL STORAGE-->
         <provider
-            android:authorities="com.example.kidsdrawingapp.fileprovider"
             android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.kidsdrawingapp.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -37,6 +37,4 @@
         </provider>
 
     </application>
-
-
 </manifest>
