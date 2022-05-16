@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
@@ -35,6 +36,12 @@ class MainActivity : AppCompatActivity() {
     private var globalButtonCurrentPaint: ImageButton? = null
     var customProgressDialog: Dialog? = null
 
+
+    private var isReadPermissionGranted = false
+    private var isWritePermissionGranted = false
+    private lateinit var permissionsLauncher: ActivityResultLauncher<Array<String>>
+
+
     private val galleryLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -43,31 +50,38 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    //Multiple permission
-    private val storageResultLauncher: ActivityResultLauncher<Array<String>> =
-        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        //Multiple permissions
+        permissionsLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
+                permissions ->
             permissions.entries.forEach {
                 val permissionName = it.key
                 val isGranted = it.value
                 if (isGranted) {
-//                    Toast.makeText(this, "Permission $permissionName Granted", Toast.LENGTH_SHORT).show()
+
+
+                    if (permissionName == Manifest.permission.READ_EXTERNAL_STORAGE) {
+                        isReadPermissionGranted = true
+                    } else if (permissionName == Manifest.permission.WRITE_EXTERNAL_STORAGE) {
+                        isWritePermissionGranted = true
+                    }
+
+
                     //Use special intent for media store
                     val pickIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
                     //pick image from gallery
                     galleryLauncher.launch(pickIntent)
-
 
                 } else {
                     Toast.makeText(this, "Permission $permissionName Denied", Toast.LENGTH_SHORT).show()
                 }
             }
         }
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
         //Scale brush with default size of 20
         binding.drawingView.scaleBrush(20f)
@@ -78,7 +92,7 @@ class MainActivity : AppCompatActivity() {
             ContextCompat.getDrawable(this, R.drawable.pallet_pressed)
         )
         binding.ibImage.setOnClickListener {
-            requestStoragePermission()
+            requestPermissions()
         }
 
         binding.ibBrush.setOnClickListener {
@@ -193,7 +207,25 @@ class MainActivity : AppCompatActivity() {
     }
 
     //Request needed permissions
-    private fun requestStoragePermission() {
+    private fun requestPermissions() {
+
+
+        val isReadPermission = ContextCompat.checkSelfPermission(this,android.Manifest.permission
+            .READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+
+        val isWritePermission = ContextCompat.checkSelfPermission(this,android.Manifest.permission
+            .WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+
+        //Set minimum SDK version into greater or equal to version Q(29)
+        val minSdkLevel = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
+
+        isReadPermissionGranted = isReadPermission
+        isWritePermissionGranted = isWritePermission || minSdkLevel
+
+        val permissionRequest =
+
+
+
         if (ActivityCompat.shouldShowRequestPermissionRationale(
                 this,
                 Manifest.permission.READ_EXTERNAL_STORAGE
@@ -210,7 +242,7 @@ class MainActivity : AppCompatActivity() {
                         "saving your drawing"
             )
         } else {
-            storageResultLauncher.launch(
+            permissionsLauncher.launch(
                 arrayOf(
                     Manifest.permission.READ_EXTERNAL_STORAGE,
 //                    Manifest.permission.WRITE_EXTERNAL_STORAGE      // if uncomment that permission, app does`t quite
