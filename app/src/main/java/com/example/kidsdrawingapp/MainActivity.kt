@@ -25,23 +25,21 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.FileOutputStream
 import java.lang.Exception
+import java.time.LocalDateTime
 
 class MainActivity : AppCompatActivity() {
 
     //Variables
     private lateinit var binding: ActivityMainBinding
     private var globalButtonCurrentPaint: ImageButton? = null
-    var customProgressDialog: Dialog? = null
-
+    private var customProgressDialog: Dialog? = null
 
     private var isReadPermissionGranted = false
     private var isWritePermissionGranted = false
     private lateinit var permissionsLauncher: ActivityResultLauncher<Array<String>>
 
-
+    //Gallery launcher
     private val galleryLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -125,9 +123,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     //Show rationale dialog for displaying why we need permission
-    private fun showRationaleDialog(title: String, message: String) {
+    private fun showRationaleDialog(message: String) {
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
-        builder.setTitle(title)
+        builder.setTitle("KidsDrawingApp")
             .setMessage(message)
             .setPositiveButton("Cancel") { dialog, _ ->
                 dialog.dismiss()
@@ -135,12 +133,10 @@ class MainActivity : AppCompatActivity() {
         builder.create().show()
     }
 
-
     //Show brush dialog to select brush size
     private fun showBrushDialog() {
         val brushDialog = Dialog(this)
-        brushDialog.setContentView(R.layout.dialog_brush_size)
-        brushDialog.setTitle("Brush size: ")
+        brushDialog.setContentView(R.layout.dialog_tool_size)
         val smallBtn: ImageButton = brushDialog.findViewById(R.id.ibSmallBrush)
         val mediumBtn: ImageButton = brushDialog.findViewById(R.id.ibMediumBrush)
         val largeBtn: ImageButton = brushDialog.findViewById(R.id.ibLargeBrush)
@@ -159,11 +155,10 @@ class MainActivity : AppCompatActivity() {
         brushDialog.show()
     }
 
-    //Show brush dialog to select brush size
+    //Show eraser dialog to select eraser size
     private fun showEraserDialog() {
         val brushDialog = Dialog(this)
-        brushDialog.setContentView(R.layout.dialog_eraser_size)
-        brushDialog.setTitle("Brush size: ")
+        brushDialog.setContentView(R.layout.dialog_tool_size)
         val smallBtn: ImageButton = brushDialog.findViewById(R.id.ibSmallBrush)
         val mediumBtn: ImageButton = brushDialog.findViewById(R.id.ibMediumBrush)
         val largeBtn: ImageButton = brushDialog.findViewById(R.id.ibLargeBrush)
@@ -210,10 +205,10 @@ class MainActivity : AppCompatActivity() {
     private fun requestPermissions() {
 
 
-        val isReadPermission = ContextCompat.checkSelfPermission(this,android.Manifest.permission
+        val isReadPermission = ContextCompat.checkSelfPermission(this,Manifest.permission
             .READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
 
-        val isWritePermission = ContextCompat.checkSelfPermission(this,android.Manifest.permission
+        val isWritePermission = ContextCompat.checkSelfPermission(this,Manifest.permission
             .WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
 
         //Set minimum SDK version into greater or equal to version Q(29)
@@ -222,23 +217,19 @@ class MainActivity : AppCompatActivity() {
         isReadPermissionGranted = isReadPermission
         isWritePermissionGranted = isWritePermission || minSdkLevel
 
-        val permissionRequest =
-
-
-
         if (ActivityCompat.shouldShowRequestPermissionRationale(
                 this,
                 Manifest.permission.READ_EXTERNAL_STORAGE
             )
         ) {
-            showRationaleDialog("Kids Drawing App", "Kids Drawing App needs to Access Your External Storage")
+            showRationaleDialog("Kids Drawing App needs to Access Your External Storage")
         } else if (ActivityCompat.shouldShowRequestPermissionRationale(
                 this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
             )
         ) {
             showRationaleDialog(
-                "Kids Drawing App", "Kids Drawing App needs Access to Your External Storage for " +
+                 "Kids Drawing App needs Access to Your External Storage for " +
                         "saving your drawing"
             )
         } else {
@@ -261,7 +252,9 @@ class MainActivity : AppCompatActivity() {
         if (bgDrawable != null) {
             bgDrawable.draw(canvas)
         } else {
-            canvas.drawColor(resources.getColor(R.color.white))
+            //Deprecated way of getting color
+//            canvas.drawColor(resources.getColor(R.color.white,))
+            canvas.drawColor(getColor(R.color.white))
         }
         //Bitmap with clean, background and view layers
         view.draw(canvas)
@@ -272,55 +265,28 @@ class MainActivity : AppCompatActivity() {
 
     private suspend fun saveBitmapFile(gBitmap: Bitmap?): String {
         var result = ""
+        val currentTime = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            LocalDateTime.now()
+        } else {
+            System.currentTimeMillis() /1000
+        }
         withContext(Dispatchers.IO) {
             if (gBitmap != null) {
                 try {
                     val bytes = ByteArrayOutputStream() // Creates a new byte array output stream.
                     // The buffer capacity is initially 32 bytes, though its size increases if necessary.
                     gBitmap.compress(Bitmap.CompressFormat.PNG, 90, bytes)
-                    /**
-                     * Write a compressed version of the bitmap to the specified outputstream.
-                     * If this returns true, the bitmap can be reconstructed by passing a
-                     * corresponding inputstream to BitmapFactory.decodeStream(). Note: not
-                     * all Formats support all bitmap configs directly, so it is possible that
-                     * the returned bitmap from BitmapFactory could be in a different bitdepth,
-                     * and/or may have lost per-pixel alpha (e.g. JPEG only supports opaque
-                     * pixels).
-                     *
-                     * @param format   The format of the compressed image
-                     * @param quality  Hint to the compressor, 0-100. 0 meaning compress for
-                     *                 small size, 100 meaning compress for max quality. Some
-                     *                 formats, like PNG which is lossless, will ignore the
-                     *                 quality setting
-                     * @param stream   The outputstream to write the compressed data.
-                     * @return true if successfully compressed to the specified stream.
-                     */
 
-                    //Create file
-                    val file = File(
-                        externalCacheDir?.absoluteFile.toString() + File.separator + "KidDrawingApp_" +
-                                System.currentTimeMillis() / 1000 + ".png"
-                    )
-                    // Here the Environment : Provides access to environment variables.
-                    // getExternalStorageDirectory : returns the primary shared/external storage directory.
-                    // absoluteFile : Returns the absolute form of this abstract pathname.
-                    // File.separator : The system-dependent default name-separator character. This string contains a single character.
-
-                    val fileOutput = FileOutputStream(file)     // Creates a file output stream to write to the file
-                    // represented by the specified object.
-                    fileOutput.write(bytes.toByteArray())   // Writes bytes from the specified byte array to this file
-                    // output stream.
-                    fileOutput.close() // Closes this file output stream and releases any system resources associated with this stream.
-                    // This file output stream may no longer be used for writing bytes.
-
-                    result = file.absolutePath  // The file absolute path is return as a result.
+                    //Save image into gallery
+                    val savedImageUri = MediaStore.Images.Media.insertImage(contentResolver,gBitmap,currentTime
+                    .toString(),"Image from KidsDrawingApp $currentTime")
 
                     //Switch from io to ui thread to show a toast
                     runOnUiThread {
                         //Cancel progress dialog in UI thread
                         cancelProgressDialog()
-                        if (result.isNotEmpty()) {
-                            Toast.makeText(this@MainActivity, "File saved successfully : $result", Toast.LENGTH_LONG)
+                        if (savedImageUri.isNotEmpty()) {
+                            Toast.makeText(this@MainActivity, "File saved successfully : $savedImageUri", Toast.LENGTH_LONG)
                                 .show()
                         } else {
                             Toast.makeText(
@@ -331,9 +297,6 @@ class MainActivity : AppCompatActivity() {
                                 .show()
                         }
                     }
-
-
-
                 } catch (e: Exception) {
                     Toast.makeText(this@MainActivity, "Something went wrong in saving logic : $e", Toast.LENGTH_SHORT)
                         .show()
