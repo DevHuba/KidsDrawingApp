@@ -91,6 +91,7 @@ class MainActivity : AppCompatActivity() {
         )
         binding.ibImage.setOnClickListener {
             requestPermissions()
+            binding.drawingView.clearCanvas()
         }
 
         binding.ibBrush.setOnClickListener {
@@ -252,8 +253,6 @@ class MainActivity : AppCompatActivity() {
         if (bgDrawable != null) {
             bgDrawable.draw(canvas)
         } else {
-            //Deprecated way of getting color
-//            canvas.drawColor(resources.getColor(R.color.white,))
             canvas.drawColor(getColor(R.color.white))
         }
         //Bitmap with clean, background and view layers

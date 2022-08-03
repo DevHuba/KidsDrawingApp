@@ -28,7 +28,11 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
             undoPaths.add(paths.removeAt(paths.size - 1))
             invalidate()
         }
+    }
 
+    fun clearCanvas() {
+        paths.clear()
+        invalidate()
     }
 
     private fun setUpDrawing() {
@@ -112,6 +116,4 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
     internal inner class CustomPath(var color: Int, var brushThickness: Float) : Path() {
 
     }
-
-
 }
